@@ -4,18 +4,18 @@ import requests
 import time
 import unidecode
 import json
-from __future__ import unicode_literals
 import youtube_dl
 import urllib
-import urllib2
+from urllib.request import urlopen
+import urllib.parse
 import os
 from bs4 import BeautifulSoup
-from BWSI-Song-Recognition import Database
-from BWSI-Song-Recognition import Audio
-from BWSI-Song-Recognition import fingerprint
+from songfp.database import Database
+from songfp.audio import *
+from songfp.fingerprint import Fingerprint
 
 
-db = Database()
+db = Database("songfp/database.pkl")
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -32,24 +32,25 @@ def start_skill():
 
 
 def youtubefile(keyword):
-    textToSearch = 'keyword'
-    query = urllib.quote(textToSearch)
+    textToSearch = keyword
+    query = urllib.parse.quote(textToSearch)
     url = "https://www.youtube.com/results?search_query=" + query
-    response = urllib2.urlopen(url)
+    response = urlopen(url)
     html = response.read()
-    soup = BeautifulSoup(html)
-    vid = soup.findAll(attrs={'class':'yt-uix-tile-link'})[0]
+    soup = BeautifulSoup(html, 'lxml')
+    vid = soup.findAll(attrs={'class':'yt-uix-tile-link'})[1]
         #print 'https://www.youtube.com' + vid['href']
     link = 'https://www.youtube.com' + vid['href']
+    print(link)
     return link
 
 @ask.intent("SongRecognitionIntent")
 def actions(Action):
-    if Action = "save":
+    if Action == "save":
         msg = "What song would you like to save"
         return question(msg)
 
-    if Action = "recognize":
+    if Action == "recognize":
         fingerp = get_song()
         songmatch = fingerp.best_match(db)
         song_msg = "The title of this song is {}".format(songmatch)
@@ -58,6 +59,7 @@ def actions(Action):
 
 @ask.intent("FileSavingIntent")
 def savefile(Song):
+    print(Song, flush = True)
     session.attributes["Song"] = Song
     name = session.attributes["Song"]
     link = youtubefile(name)
@@ -65,22 +67,31 @@ def savefile(Song):
     #conversion = ffmpeg -i webm -acodec libmp3lame -aq 4 output.mp3
     ydl = youtube_dl.YoutubeDL()
     options = {
-    'format': 'bestaudio/best',
-    'extractaudio' : True,  # only keep the audio
-    'audioformat' : "mp3",  # convert to mp3
-    'outtmpl': '%(id)s',    # name the file the ID of the video
-    'noplaylist' : True,    # only download single song, not playlist
+        'format': 'bestaudio/best',
+        'extractaudio' : True,  # only keep the audio
+        'audioformat' : "mp3",  # convert to mp3
+        'outtmpl': '%(id)s',    # name the file the ID of the video
+        'noplaylist' : True,    # only download single song, not playlist
     }
-    with youtube_dl.YoutubeDL(options) as ydl:
-        file = ydl.download(['link'])
-    freqs, times, S = Audio.sample(file)
-    fp = Fingerprints(S, freqs, times)
-    r = none
-    with ydl:
-    r = ydl.extract_info(url, download=False)
-    title = r['title']
-    db.addsong(fp.fingerprint, title)
 
+    savepath = make_savepath(Song)
+    print(savepath)
+    with youtube_dl.YoutubeDL(options) as ydl:
+        result = ydl.extract_info(link, download=True)
+        os.rename(result['id'], savepath)
+        # title = result['id']
+    # print(title)
+    # print(file)
+    freqs, times, S = sample("songs/{}.mp3".format(Song))
+    fp = Fingerprint(S, freqs, times)
+    print(type(fp))
+    db.addSong(fp, Song)
+
+def make_savepath(title):
+    savedir = "songs"
+    if not os.path.exists(savedir):
+        os.makedirs(savedir)
+    return os.path.join(savedir, "%s.mp3" % (title))
 
 
 

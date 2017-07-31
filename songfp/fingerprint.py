@@ -10,7 +10,7 @@ class Fingerprint:
         self.freqs = freqs
         self.times = times
         self.peaks = self.find_peaks(self.spectrogram, self.freqs)
-        self.distance = 100 #adjust as necessary
+        self.distance = 10 #adjust as necessary
         self.fingerprint = self.process(self.peaks, self.freqs, self.times, self.distance)
 
     def find_peaks(self, data, freqs):
