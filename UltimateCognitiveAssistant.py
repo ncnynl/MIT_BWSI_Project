@@ -10,7 +10,7 @@ ask = Ask(app, '/')
 
 @app.route('/')
 def homepage():
-    return "ddddd"
+    return "YEAH BOI!!!!!!!!!!!"
 
 @ask.launch
 def start_skill():
@@ -30,25 +30,26 @@ def no_intent():
 
 @ask.intent("OptionOneIntent")
 def oneIntent(term):
-    from ..MITThirdProject.NewsBuddy.SearchEngine import query
+    from SearchEngine import SearchEngine
     #db = loadDatabase()
-    return statement(query(term))
+    SE = SearchEngine()
+    return statement(SE.query(term))
 
 @ask.intent("OptionTwoIntent")
 def secondIntent(entity):
-    from ..MITThirdProject.NewsBuddy.TopEntities import getTopThreeEntities
+    from TopEntities import getTopEntities
     db = loadDatabase()
     return statement(getTopThreeEntities(db,entity))
 
 @ask.intent("OptionThreeIntent")
 def thirdIntent(query):
-    from ..MITThirdProject.NewsBuddy.requeteAlentite import getEntities
+    from requeteAlentite import getEntities
     db = loadDatabase()
     return statement(getEntities(db,query))
 
 def loadDatabase():
-    from ..MITThirdProject.NewsBuddy.database import Database
-    db = Database("C:/Users/nares_000/PycharmProjects/NewMITCodeSurface/MITThirdProject/NewsBuddy/database.pkl")
+    from database import Database
+    db = Database("database.pkl")
     return db
 
 
