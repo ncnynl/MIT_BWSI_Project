@@ -15,7 +15,6 @@ from songfp.audio import *
 from songfp.fingerprint import Fingerprint
 
 
-db = Database("songfp/database.pkl")
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -35,10 +34,11 @@ def youtubefile(keyword):
     textToSearch = keyword
     query = urllib.parse.quote(textToSearch)
     url = "https://www.youtube.com/results?search_query=" + query
-    response = urlopen(url)
-    html = response.read()
-    soup = BeautifulSoup(html, 'lxml')
-    vid = soup.findAll(attrs={'class':'yt-uix-tile-link'})[1]
+    response = requests.get(url)
+    html = response.content
+    soup = BeautifulSoup(html, 'html.parser')
+    print(soup.find(id = "content").prettify())
+    vid = soup.find_all(class_= 'yt-uix-tile-link')[0]
         #print 'https://www.youtube.com' + vid['href']
     link = 'https://www.youtube.com' + vid['href']
     print(link)
@@ -52,7 +52,9 @@ def actions(Action):
 
     if Action == "recognize":
         fingerp = get_song()
+        db = Database("songfp/music.pkl")
         songmatch = fingerp.best_match(db)
+        print(songmatch)
         song_msg = "The title of this song is {}".format(songmatch)
         return statement(song_msg)
 
@@ -84,10 +86,11 @@ def savefile(Song):
     # print(file)
     freqs, times, S = sample("songs/{}.mp3".format(Song))
     fp = Fingerprint(S, freqs, times)
+    db = Database("songfp/database.pkl")
+
     print(type(fp))
     db.addSong(fp, Song)
-    print("saved")
-    # return statement("Saved")
+
 def make_savepath(title):
     savedir = "songs"
     if not os.path.exists(savedir):
@@ -97,7 +100,8 @@ def make_savepath(title):
 
 
 def get_song():
-    freqs, times, S = Audio.mic()
+
+    freqs, times, S = mic(3)
     fp = Fingerprint(S, freqs, times)
     return fp
 
