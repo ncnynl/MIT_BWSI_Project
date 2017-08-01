@@ -1,0 +1,41 @@
+{
+  "intents": [
+    {
+      "intent": "getInputIntent",
+      "slots": [
+        {
+          "name": "Input",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "QueryIntent"
+      
+    },
+    {
+      "intent": "EntityIntent"
+    },
+    {
+      "intent": "QuerytoEntityIntent"
+    },
+    {
+      "intent": "QueryToDocumentIntent"
+    },
+    {
+      "intent": "YesIntent"
+    },
+    {
+      "intent": "WhichDocintent",
+      "slots": [
+        {
+          "name": "Number",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "NoIntent"
+    }
+  ]
+}

@@ -14,7 +14,7 @@ def getTopEntities(entity, database, numEntities = 4):
         finalEnts.remove(entity)
     if (len(finalEnts) < numEntities):
         print("Sorry, the article was not long enough to return top " + str(numEntities) + " entities")
-    return finalEnts
+    return list(finalEnts)
 
 def getEntities(db, query, topEntities = 5):
     documents = db.engine.query(query)  
