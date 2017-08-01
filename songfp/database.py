@@ -25,10 +25,10 @@ class Database:
         except EOFError:
             self.music = {}
             #self.counter = 0
-            self.songs = {} 
-        
+            self.songs = {}
+
     def __repr__(self):
-        return "{}".format(self.songs)
+        return "{}".format(self.music)
 
     #notes is a numpy array of numpy arrays which each contains the two notes with the delta t between them
     def addSong(self, fp, song_name):
@@ -48,10 +48,12 @@ class Database:
         """
 
         count = len(self.songs)
+        print(count)
         self.songs[count] = song_name
         keys = fp.fingerprint[:, 0]
         times = fp.fingerprint[:, 1]
         for i in range(len(keys)):
+            print(i)
             if keys[i] in self.music:
                 self.music[keys[i]].append((count, times[i]))
             else:
@@ -132,7 +134,7 @@ class Database:
         ----------
         fp:Fingerprint
             fingerprint of audio to match
-        
+
         Returns
         -------
         String

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_ask import Ask, statement, question
-from BWSIFace.database import Database 
+from BWSIFace.database import Database
 from BWSIFace.cameras import imgarray
 from BWSIFace.detection import detect
 from BWSIFace.profileClass import ProfileClass
@@ -13,7 +13,7 @@ db = Database("profiles.pkl")
     
 app = Flask(__name__)
 ask = Ask(app, '/')
-img = 0 #this is for file 
+img = 0 #this is for file
 img_array = 0 #this is for camera
 
 @app.route('/')
@@ -29,7 +29,7 @@ def get_image():
     img_array = imgarray()
     return img_array
 
-@ask.intent("TakePictureIntent") 
+@ask.intent("TakePictureIntent")
 def take_image():
     global img_array
     img_array = get_image()
@@ -48,6 +48,11 @@ def save_image(file):
     msg = "Who's in the photo? (separate names by comma space)"
     return statement(msg)
 """
+@ask.intent("ClearIntent")
+def clear():
+
+    db.clear()
+    return statement("lmao")
 
 @ask.intent("RecognizeIntent")
 def recognize_image():
@@ -91,6 +96,7 @@ def ask_for_name_file(names):
 @ask.intent("CameraNameIntent")
 def ask_for_name(camnames):
     camnames = "{}".format(camnames)
+    print(camnames)
     faces = detect(img_array, showImg = False)
     camnames = camnames.lower().split()
     for i, face in enumerate(faces):
@@ -108,5 +114,10 @@ def no_intent():
 if __name__ == '__main__':
     app.run(debug=True)
 
+
 #ake_image()
 #print(ask_for_name("brandon"))
+
+#take_image()
+#print(ask_for_name("brandon"))
+

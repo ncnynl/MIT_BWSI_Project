@@ -87,12 +87,14 @@ class Fingerprint:
         """
         matches = []
         match_no_time = []
+
         for i in range(len(self.fingerprint)):
             key = self.fingerprint[i, 0]
             time1 = self.fingerprint[i, 1]
             songs = database.music.get(key, None)
             if(songs == None):
-                continue;
+                print("No matches")
+                continue
             else:
                 for i in range(len(songs)):
                     song, time2 = songs[i]
@@ -104,4 +106,5 @@ class Fingerprint:
         counter2 = Counter(match_no_time)
         # print(counter)
         # print(counter2)
+        print(counter)
         return counter.most_common(1)
