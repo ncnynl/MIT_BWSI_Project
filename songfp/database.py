@@ -28,7 +28,7 @@ class Database:
             self.songs = {} 
         
     def __repr__(self):
-        return "{}".format(self.music)
+        return "{}".format(self.songs)
 
     #notes is a numpy array of numpy arrays which each contains the two notes with the delta t between them
     def addSong(self, fp, song_name):
