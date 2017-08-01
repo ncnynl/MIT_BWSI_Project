@@ -10,7 +10,7 @@ import unidecode
 import json
 
 db = Database("profiles.pkl")
-
+    
 app = Flask(__name__)
 ask = Ask(app, '/')
 img = 0 #this is for file 
@@ -108,5 +108,5 @@ def no_intent():
 if __name__ == '__main__':
     app.run(debug=True)
 
-t#ake_image()
+#ake_image()
 #print(ask_for_name("brandon"))
