@@ -4,8 +4,8 @@
       "intent": "getInputIntent",
       "slots": [
         {
-          "name": "Input",
-          "type": "LITERAL"
+          "name": "input",
+          "type": "ALL_SEARCH_TYPES"
         }
       ]
     },

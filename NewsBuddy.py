@@ -113,8 +113,8 @@ def summarize():
         return statement("Which document? Give a number")
 
 @ask.intent("WhichDocIntent")
-def summarizeRightDoc(number):
-    documentID = TotalDocs[number - 1]
+def summarizeRightDoc(Number):
+    documentID = TotalDocs[Number - 1]
     summary = summarize(db, documentID, stopWordsList)
     msg = "The summary is: {}".format(summary)
     return statement(msg)
