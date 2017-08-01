@@ -86,7 +86,8 @@ def savefile(Song):
     fp = Fingerprint(S, freqs, times)
     print(type(fp))
     db.addSong(fp, Song)
-    return statement("Saved")
+    print("saved")
+    # return statement("Saved")
 def make_savepath(title):
     savedir = "songs"
     if not os.path.exists(savedir):
