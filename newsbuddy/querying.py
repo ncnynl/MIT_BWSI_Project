@@ -1,7 +1,7 @@
 from collections import Counter
 from database import Database
 import itertools
-def getTopEntities(entity, database, numEntities = 3):
+def getTopEntities(entity, database, numEntities = 4):
     IDs = database.engine.get_matches_term(entity)
     allEnts = []
     for ID in database.entities.keys():
