@@ -33,7 +33,7 @@ def get_image():
 def take_image():
     global img_array
     img_array = get_image()
-    msg = "Who's in the photo? (separate names by commas and spaces)"
+    msg = "Who's in the photo?"
     return question(msg)
 
 """@ask.intent("FileAskerIntent")
