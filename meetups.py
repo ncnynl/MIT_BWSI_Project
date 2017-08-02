@@ -1,5 +1,8 @@
 from googleplaces import GooglePlaces, types, lang
 from pygeocoder import Geocoder
+from flask import Flask
+from flask_ask import Ask, statement, question, session
+import requests
 
 API_Key = AIzaSyCnuCETkfIGLknIdLADpe5v2l62mogdHLE
 
