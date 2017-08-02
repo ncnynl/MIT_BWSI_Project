@@ -13,8 +13,6 @@ result = Geocoder.geocode("7250 South Tucson Boulevard, Tucson, AZ 85756")
 if(result.valid_address == False):
     return "please enter a valid address"
 
-
-
 #nearby search, get keyword?
 query_result = google_places.nearby_search(
     location= result, keyword='Restaurants',
@@ -22,7 +20,6 @@ query_result = google_places.nearby_search(
 
 if query_result.has_attributions:
    print query_result.html_attributions
-
 
 for place in query_result.places:
     print place.name
