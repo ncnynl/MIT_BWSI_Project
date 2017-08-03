@@ -1,0 +1,16 @@
+{
+  "intents": [
+    {
+      "intent": "mathIntent",
+      "slots": [
+        {
+          "name": "input",
+          "type": "ALL_MATH_TYPES"
+        }
+      ]
+    },
+    {
+      "intent": "NoIntent"
+    }
+  ]
+}
