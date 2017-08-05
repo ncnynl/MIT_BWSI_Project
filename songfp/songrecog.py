@@ -1,3 +1,5 @@
+#RiceKrispies: Julie Lee
+
 from flask import Flask
 from flask_ask import Ask, statement, question, session
 import requests
@@ -31,6 +33,11 @@ def start_skill():
 
 
 def youtubefile(keyword):
+    """
+    Takes in a keyword, or what one would normally enter in the YouTube search engine. Will return the
+    url of the first video that shows up.
+
+    """
     textToSearch = keyword
     query = urllib.parse.quote(textToSearch)
     url = "https://www.youtube.com/results?search_query=" + query
@@ -46,6 +53,12 @@ def youtubefile(keyword):
 
 @ask.intent("SongRecognitionIntent")
 def actions(Action):
+    """
+    Takes in user input. If the requested action is save, Alexa will prompt the user to reply
+    with the name of the song they wish to save in the database. If the action is recognize,
+    the user will play the song for 3 seconds. Our songfp program, using fingerprinting and peak finding,
+    will find the best match for the song from the database.
+    """
     if Action == "save":
         msg = "What song would you like to save"
         return question(msg)
@@ -61,6 +74,11 @@ def actions(Action):
 
 @ask.intent("FileSavingIntent")
 def savefile(Song):
+    """
+    Takes in the name of the song the user wants to save. Find the YouTube url of this song through
+    youtubefile, and convert the url to an mp3 file. Only extract the audio, and make sure only a single
+    song is downloaded, not a playlist. Create a new fingerprint for the song and add it to the database.
+    """
     print(Song, flush = True)
     session.attributes["Song"] = Song
     name = session.attributes["Song"]
