@@ -1,3 +1,5 @@
+#RiceKrispies: Julie Lee
+
 from googleplaces import GooglePlaces, types, lang
 import googlemaps
 from geopy.geocoders import Nominatim
@@ -17,8 +19,8 @@ ask = Ask(app, '/')
 
 API_Key = "AIzaSyDjIdmWA4l-U9zAalsg9ySB3vy1qBxdJZs"
 gmaps = googlemaps.Client(key=API_Key)
-first = set()
-sec = set()
+first = set() #a set that contains all the locations a certain radius away from the first address
+sec = set() #a set that contains all the locations a certain radius away from the second address
 
 @app.route('/')
 def homepage():
@@ -31,6 +33,11 @@ def start_skill():
 
 @ask.intent("FirstAddressSavingIntent")
 def saveFAddress(FAddress):
+    """
+    Takes in the user input of an address in the format of: street address, city, and state. By utilizing geopy,
+    convert the input to latitude, longitude coordinates. Then, Alexa will prompt the user to enter the second
+    address.
+    """
     session.attributes["FAddress"] = FAddress
     addr = session.attributes["FAddress"]
     print(addr, flush = True)
@@ -46,6 +53,11 @@ def saveFAddress(FAddress):
 
 @ask.intent("SecondAddressSavingIntent")
 def saveSAddress(SAddress):
+    """
+    Takes in the user input of the second address and converts it to coordinate points. Using radiuscalc, find the
+    2/3 distance between the first and second address. Find all the pertaining locations within this radius for
+    both addresses by calling nearbysearch. Return the intersection of these two sets.
+    """
     session.attributes["SAddress"] = SAddress
     addr = session.attributes["SAddress"]
     print(addr, flush = True)
@@ -65,8 +77,24 @@ def saveSAddress(SAddress):
 
 
 def radiuscalc(lao, loo, lad, lod):
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={},{}&destinations={},{}&key=AIzaSyDjIdmWA4l-U9zAalsg9ySB3vy1qBxdJZs".format(lao, loo, lad, lod)
+    """
+    Utilizes the Google Maps distance matrix API, which takes in the coordinates of two locations and returns the
+    distance in meters between the two. This method will return 2/3 of this distance.
 
+    Parameters
+    ----------
+    lao: latitude of origin (first address)
+    loo: longitude of origin (first address)
+    lad: latitude of destination (second address)
+    lod: longitude of destination (second address)
+
+    Returns
+    -------
+    float
+        2/3 of the distance between the two addresses
+    """
+
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={},{}&destinations={},{}&key=AIzaSyDjIdmWA4l-U9zAalsg9ySB3vy1qBxdJZs".format(lao, loo, lad, lod)
     response = urlopen(url).read().decode('utf8')
     obj = json.loads(response)
     print(obj)
@@ -76,6 +104,22 @@ def radiuscalc(lao, loo, lad, lod):
     return fradius
 
 def nearbysearch(lat, lon, rad):
+    """
+    Utilizes the Google Maps Places nearby search API, which takes in the coordinates of an address, radius, and type.
+    The type is a keyword that indicates the kind of locations the user is searching for, such as a restaurant.
+    The search will return all the pertaining locations within the specified radius from the original address.
+
+    Parameters
+    ----------
+    lat: latitude coordinate of address
+    lon: longitude coordinate of address
+    rad: radius of search
+
+    Returns
+    -------
+    set
+        set of suggested locations
+    """
     nearby = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}&radius={}&type=restaurant&key=AIzaSyDjIdmWA4l-U9zAalsg9ySB3vy1qBxdJZs".format(lat,lon,rad)
     ur = urlopen(nearby)
     data = ur.read().decode('utf-8')
