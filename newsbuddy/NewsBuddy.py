@@ -114,7 +114,7 @@ def queryToDocument():
     print(finalDocs, flush = True)
     wikipediaString = "wikipedia"
     cnnString = "cnn"
-    reuterString = "reteurs"
+    reuterString = "reuters"
     global TotalDocs
     if len(finalDocs) == 0:
         return statement("Sorry I could not find any documents")
