@@ -47,8 +47,33 @@ def saveFAddress(FAddress):
     session.attributes["lono"] = location.longitude
     print(session.attributes["lato"], session.attributes["lono"])
 
-    msg = "What is the second address?"
+    msg = "Would you like to add another address?"
     return question(msg)
+
+@ask.intent("YesIntent")
+def yes_intent():
+    msg = "What is the second address"
+    return question(msg)
+
+@ask.intent("NoIntent")
+def no_intent():
+    msg = "How far would you like to search in meters"
+    return question(msg)
+
+@ask.intent("DistanceSavingIntent")
+def saveDistance(radius):
+    session.attributes["radius"] = radius
+    nearby = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}&radius={}&type=restaurant&key=AIzaSyDjIdmWA4l-U9zAalsg9ySB3vy1qBxdJZs".format(session.attributes["lato"], session.attributes["lono"],session.attributes["radius"])
+    ur = urlopen(nearby)
+    data = ur.read().decode('utf-8')
+    result = json.loads(data)['results']
+    places = set()
+    for i in range(len(result)):
+        places.add(result[i]['name'])
+    print(places)
+    dest_msg = "My recommended locations are {}".format(places)
+    return statement(dest_msg)
+
 
 
 @ask.intent("SecondAddressSavingIntent")
@@ -100,7 +125,7 @@ def radiuscalc(lao, loo, lad, lod):
     print(obj)
     radius = float((obj['rows'][0]['elements'][0]['distance']['text']).split(" ")[0])
     print(radius)
-    fradius = radius * 2/3 * 1000
+    fradius = radius * 4/5 * 1000
     return fradius
 
 def nearbysearch(lat, lon, rad):
