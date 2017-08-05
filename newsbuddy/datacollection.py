@@ -2,7 +2,7 @@ import feedparser
 import justext
 import requests
 import sys
-from .database import Database
+from database import Database
 from bs4 import BeautifulSoup
 import re
 import mistune

@@ -1,6 +1,5 @@
 #RiceKrispies: Julie Lee
 
-from googleplaces import GooglePlaces, types, lang
 import googlemaps
 from geopy.geocoders import Nominatim
 import urllib

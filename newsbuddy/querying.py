@@ -1,5 +1,5 @@
 from collections import Counter
-from .database import Database
+from database import Database
 import itertools
 def getTopEntities(entity, database, numEntities = 4):
     """

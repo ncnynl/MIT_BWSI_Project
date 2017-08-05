@@ -1,11 +1,11 @@
-from .database import Database
+from database import Database
 from collections import Counter
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.lancaster import LancasterStemmer
 import re, string
-from .nlp_stock import strip_punc
+from nlp_stock import strip_punc
 
 Title = "" #Title of the document AFTER calling summarize function
 
