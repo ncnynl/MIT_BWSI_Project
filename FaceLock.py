@@ -26,11 +26,11 @@ Passwords = [] #stores the passwords the user appended
 
 @app.route('/')
 def homepage():
-    return "Hello"
+    return "Hello, this is passLock"
 
 @ask.launch
 def start_skill():
-    msg = "Hello, Would you like to retrieve your passwords or store a password?"
+    msg = "Would you like to retrieve your passwords or store a password?"
     return question(msg)
 
 def get_image():
@@ -61,9 +61,7 @@ def retrieve_passwords():
 		print(BestMatch, flush = True)
 		Passwords = list(BestMatch.passwords) 
 		passwords = BestMatch.passwords
-		print(passwords, flush = True)
 		scores = password_strengths()
-		print(scores, flush = True)
 		msg = ""
 		if (not(len(scores) == 0)):
 			msg += "You have a weak password, it is"
@@ -86,16 +84,15 @@ def store_password():
 	"""
 	global descript
 	global Boolean 
-	global FaceGot
+	#global FaceGot
 	img_array = get_image()
 	FaceGot = detect(img_array, False)
 	global BestMatch
-	print(len(db.profiles), flush = True)
 	if (not(len(db.profiles)) == 0):
 		BestMatch = db.computeMatches((FaceGot[0])[0], db.profiles)
 		print(BestMatch, flush = True)
 		if (BestMatch in db.profiles):
-			msg = "What website do you want to save a password to. After you enter a website, follow the instructions in the computer console"
+			msg = "What website do you want to save a password to. After you tell me, follow the instructions in the computer console"
 			return question(msg)
 		else:
 			Boolean = True
@@ -115,9 +112,9 @@ def add_passwords(website):
 	password = input("Enter the password for the website.\n")
 	password = "{}".format(password)
 	website = "{}".format(website)
-	print(password, flush = True)
 	passwords = website + ":" + password
 	passwords = passwords.split()
+	print(passwords, flush = True)
 	global Passwords
 	global BestMatch
 	Passwords = passwords
@@ -125,9 +122,8 @@ def add_passwords(website):
 		newProfile = ProfileLock(Name, FaceGot, passwords)
 		db.addProfile(newProfile) 
 	else:
-		for i, password in enumerate(passwords):
-			BestMatch.addPass(password)
-	message = "Okay got it!"
+		BestMatch.addPass(password)
+	message = "Okay, got it!"
 	return statement(message)
 
 @ask.intent("AddNewProfileIntent")
@@ -154,14 +150,13 @@ def password_strengths():
 	for i, password in enumerate(Passwords):
 		indexer = password.index(":")
 		password = password[indexer + 1]
-		print(password, flush = True)
 		score = 0
 		score += len(password) * 4
 		if password.isalpha():
 			score -= len(password)
 		if password.isdigit():
 			score -= len(password) 
-		for letter in password:
+		for i, letter in enumerate(password):
 			upperCount = 0
 			lowerCount = 0
 			numberCount = 0
@@ -175,14 +170,17 @@ def password_strengths():
 			score += (len(password) - upperCount)*2
 			score += (len(password) - lowerCount)*2
 			score += numberCount * 4
-			if (not (i == 1) and letter.lower() == password[i-1].lower()):
-				score -= 1
-			if (not(i == 1) and letter.isupper() and password[i-1].isupper()):
-				score -= 1
-			if (not(i == 1) and letter.islower() and password[i-1].islower()):
-				score -= 1
-			if (not(i == 1) and letter.isdigit() and password[i-1].isdigit()):
-				score -= 1
+			"""if (i == 0):
+				continue
+			else:
+				if (letter.lower() and password[i-1].lower()):
+					score -= 1
+				if (letter.isupper() and password[i-1].isupper()):			
+					score -= 1
+				if (letter.islower() and password[i-1].islower()):
+					score -= 1
+				if (letter.isdigit() and password[i-1].isdigit()):
+					score -= 1"""
 		scores.append(score)
 	return scores
 
@@ -191,8 +189,8 @@ def no_intent():
 	"""
 	Intent that is intialized if the user wants to cancel action  
 	"""
-    msg = "Ok, thanks. Have a nice day."
-    return statement(msg)
+	msg = "Ok, have a nice day."
+	return statement(msg)
 
 if __name__ == '__main__':
     app.run(debug=True)

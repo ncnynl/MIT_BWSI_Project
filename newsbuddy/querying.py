@@ -19,20 +19,26 @@ def getTopEntities(entity, database, numEntities = 4):
     topEnts = allEnts.most_common(numEntities)
     finalEnts = set([i[0] for i in topEnts])
     finalEnts = list(finalEnts)
+    trulyFinalEnt = []
+    us = "US"
+    united = "United States"
     if (entity in finalEnts):
         finalEnts.remove(entity)
     for ent in finalEnts:
         print(ent, flush = True)
         ent = "{}".format(ent)
         ent = ent.replace(".", "")
-        print(ent, flush = True)
-        if str(ent) == "United States":
-            del ent
-    print(finalEnts, flush = True)
-    finalEnts = set(finalEnts)
-    if (len(finalEnts) < numEntities):
+        if str(ent) == 'United States' and us in finalEnts:
+            continue
+        if str(ent) == 'US' and united in finalEnts:
+            continue    
+        else:
+            trulyFinalEnt.append(ent)
+    print(trulyFinalEnt, flush = True)
+    trulyFinalEnt = set(finalEnts)
+    if (len(trulyFinalEnt) < numEntities):
         print("Sorry, the article was not long enough to return top " + str(numEntities) + " entities")
-    return list(finalEnts)
+    return list(trulyFinalEnt)
 
 def getEntities(db, query, topEntities = 5):
     """

@@ -34,6 +34,9 @@ def solveMath(equation):
 	testy = "derivative"
 	yay = "integral"
 	yaye = "integrate"
+	bass = "bass"
+	if bass in stringEquation:
+		stringEquation = stringEquation.replace("bass", "base") 	
 	if testy in stringEquation:
 		result = client.query(stringEquation)
 		message = next(result.results).text
@@ -49,7 +52,12 @@ def solveMath(equation):
 		return statement(message)
 	result = client.query(stringEquation)
 	message = next(result.results).text
-	message = message.replace("/", " divided by ")
+	message = message.replace("/", " over ")
+	message = message.replace("-", " minus ")
+	message = message.replace("~", " or about ")
+	message = message.replace("^2", " squared ")
+	message = message.replace("sqrt", " square root of ")
+	message = message.replace("_", " base ")
 	print(message, flush = True)
 	return statement(message)
 

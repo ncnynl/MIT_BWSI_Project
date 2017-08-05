@@ -15,8 +15,8 @@ from newsbuddy.datacollection import *
 
 db = Database(file = "./newsbuddy/database.pkl")
 
-url = "https://en.wikipedia.org/wiki/Barack_Obama"
-#rawText = get_text_from_wikipedia(url)
-#db.addDocument(url, rawText)
-print(summarize(db, url, stop_words()))
-print(len(summarize(db, url, stop_words())))
+url = "https://en.wikipedia.org/wiki/Mathematics"
+rawText = get_text_from_wikipedia(url)
+db.addDocument(url, rawText)
+#print(summarize(db, url, stop_words()))
+#print(len(summarize(db, url, stop_words())))

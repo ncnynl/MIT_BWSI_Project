@@ -64,7 +64,7 @@ class Database:
             distances.append(np.linalg.norm(picDescr - curDes))
         distances = np.array(distances)
         print(np.min(distances))
-        if np.min(distances)>.45:
+        if np.min(distances) > 0.45:
             return Profile("Not Recognized", None)
         return profiles[np.argmin(distances)]
 
