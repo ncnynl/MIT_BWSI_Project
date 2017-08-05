@@ -1,109 +1,160 @@
 from flask import Flask
 from flask_ask import Ask, statement, question
-from BWSIFace.datalock import Datalock
-from BWSIFace.cameras import imgarray
-from BWSIFace.detection import detect
-from BWSIFace.profileLock import ProfileLock
+from face_recog.datalock import Datalock
+from face_recog.module import imgarray
+from face_recog.module import detect
+from face_recog.profileLock import ProfileLock
+import numpy as np
+import getpass
+import re
+import skimage.io as io
+import sys
+from pathlib import Path as _Path
+import os as _os	
+import time
 
-db = Datalock("profileLock.pkl")
-#app = Flask(__name__)
-#ask = Ask(app, '/')
-img = 0 #this is for file 
-img_array = 0 #this is for camera
-FaceGot = 0
-Name = ""
-Boolean = False
-BestMatch = None
-Passwords = []
+app = Flask(__name__)
+ask = Ask(app, '/')
 
-#@app.route('/')
+db = Datalock("profileLock.pkl") #Loading the current database into the variable
+img_array = 0 #Global Variable to store the picture-array
+FaceGot = 0 #stores the detcted face as a global variable to allow interactions between functions
+Name = "" #stores the name inputed by the user to 
+Boolean = False #stores whether the user is a new person
+BestMatch = None #stores who the computer recognizes as the best match in the image taken by the computer
+Passwords = [] #stores the passwords the user appended
+
+@app.route('/')
 def homepage():
-    return "Hello, this is an application where we use your face to manage passwords"
+    return "Hello"
 
-#@ask.launch
+@ask.launch
 def start_skill():
     msg = "Hello, Would you like to retrieve your passwords or store a password?"
     return question(msg)
 
 def get_image():
-    img_array = imgarray()
-    return img_array
+	"""
+	This takes an image and formats it into an array
+	Return: Image array
+	"""
+	img_array = imgarray()
+	return img_array
 
-#@ask.intent("RetrievePasswordIntent") 
+@ask.intent("RetrievePasswordIntent") 
 def retrieve_passwords():
+	"""
+	Takes an image and then detects the face in the image.  After, find the best match for the person in the image. Then, retrieves
+	the person corresponding to the password. Goes through the password and determines if the password is weak or strong.  If the 
+	password is weak, Alexa says the password outloud forcing you to change the password.  It then prints out all the passwords 
+	corresponding to your name. If the person is not recognized, Alexa will not allow you to see the passwords.   
+
+	Returns: All weak passwords OR an error message
+	"""
 	img_array = get_image()
 	global BestMatch
 	faceGot = detect(img_array, False)
 	descript = faceGot[0]
-	BestMatch = db.computeMatches(descript, db.profiles)
-	print(BestMatch)
-	passwords = BestMatch.passwords
-	print(passwords)
-	scores = password_strengths()
-	msg = ""
-	for i, score in enumerate(scores):
-		if score < 40:
-			msg += "You have a weak password, it is {}".format(Passwords[i])
-	msg += "Okay, I printed out all the passwords for you"
-	return statement(msg)
+	BestMatch = db.computeMatches(descript[0], db.profiles)
+	global Passwords 
+	if (BestMatch.passwords is not None):
+		print(BestMatch, flush = True)
+		Passwords = list(BestMatch.passwords) 
+		passwords = BestMatch.passwords
+		print(passwords, flush = True)
+		scores = password_strengths()
+		print(scores, flush = True)
+		msg = ""
+		if (not(len(scores) == 0)):
+			msg += "You have a weak password, it is"
+		for i, score in enumerate(scores):
+			if score < 40:
+				indexer = Passwords[i].index(":")
+				msg += " {} and".format((Passwords[i])[indexer+1 : ])
+		msg += " I printed out all the passwords for you"
+		return statement(msg)
+	else:
+		msg = "I don't recognize you, stop trying to hack into passwords"
+		return statement(msg)	
 
-#@ask.intent("StoreIntent")
+@ask.intent("StoreIntent")
 def store_password():
+	"""
+	Gets an image and then detects the face.  If the database is empty, then it immediately prompts for your name to create a new
+	profile.  If the database is not empty but the computer can not recognize you, it prompts for your name to create a new profile. 
+	Otherwise, it asks you which website do you want to save the password to.   
+	"""
 	global descript
-	global Boolean
+	global Boolean 
+	global FaceGot
 	img_array = get_image()
-	print(img_array)
 	FaceGot = detect(img_array, False)
 	global BestMatch
-	print((FaceGot[0])[0])
-	print(len(db.profiles))
+	print(len(db.profiles), flush = True)
 	if (not(len(db.profiles)) == 0):
 		BestMatch = db.computeMatches((FaceGot[0])[0], db.profiles)
-		print(BestMatch)
+		print(BestMatch, flush = True)
 		if (BestMatch in db.profiles):
-			msg = "Enter all your passwords please"
-			#return statement(msg)
+			msg = "What website do you want to save a password to. After you enter a website, follow the instructions in the computer console"
+			return question(msg)
 		else:
 			Boolean = True
 			msg = "Tell me your name"
-			#return statement(msg)
-	else:
+			return question(msg)
+	else: 
 		Boolean = True
 		msg = "Tell me your name"
-		#return statement(msg)
+		return question(msg)
 
-#@ask.intent("AppendPasswordsIntent")
-def add_passwords(passwords): #issues with typing vs saying the passwords, no need to separate by oommas
-	passwords = "{}".format(passwords)
+@ask.intent("AppendPasswordsIntent")
+def add_passwords(website):
+	"""
+	Parameter: Website name
+	Asks the user to type their password to the corresponding website and then adds it to the profile in the database
+	"""
+	password = input("Enter the password for the website.\n")
+	password = "{}".format(password)
+	website = "{}".format(website)
+	print(password, flush = True)
+	passwords = website + ":" + password
 	passwords = passwords.split()
 	global Passwords
 	global BestMatch
 	Passwords = passwords
-	print(Name)
-	print(Passwords)
-	print(Boolean)
 	if (Boolean):
 		newProfile = ProfileLock(Name, FaceGot, passwords)
-		db.addProfile(newProfile)
-		print(newProfile)
-		for i, password in enumerate(passwords):
-			newProfile.addPass(password)
+		db.addProfile(newProfile) 
 	else:
 		for i, password in enumerate(passwords):
 			BestMatch.addPass(password)
 	message = "Okay got it!"
-	#return statement(message)
+	return statement(message)
 
-#@ask.intent("AddNewProfileIntent")
+@ask.intent("AddNewProfileIntent")
 def add_profile(name):
+	"""
+	Parameter: User Name
+	Asks for the name of the user.  
+	"""
 	global Name
-	Name = "{}".format(name)
-	msg = "Enter all your passwords please"
-	#return statement(msg)
+	Name = "{}".format(name) 
+	msg = "What website do you want to save a password to.  After you enter a website, follow the instructions in the computer console"
+	return question(msg)
 
 def password_strengths():
+	"""
+	Determines the password strength of a password through an algorithm.  You get rewarded for longer passwords and ones with upper 
+	and lower cases but get penalized if you have consecutive upper cases or lower cases.  There is more nuance but that is the 
+	general overview.  
+
+	Returns: Scores
+	"""
 	scores = []
+	print(Passwords)
 	for i, password in enumerate(Passwords):
+		indexer = password.index(":")
+		password = password[indexer + 1]
+		print(password, flush = True)
 		score = 0
 		score += len(password) * 4
 		if password.isalpha():
@@ -135,14 +186,13 @@ def password_strengths():
 		scores.append(score)
 	return scores
 
-#@ask.intent("NoIntent")
+@ask.intent("NoIntent")
 def no_intent():
+	"""
+	Intent that is intialized if the user wants to cancel action  
+	"""
     msg = "Ok, thanks. Have a nice day."
     return statement(msg)
 
-#if __name__ == '__main__':
-    #app.run(debug=True)
-
-store_password()
-add_profile("Brandon")
-add_passwords("My project sucks")
+if __name__ == '__main__':
+    app.run(debug=True)

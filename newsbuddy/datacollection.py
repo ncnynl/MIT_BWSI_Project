@@ -2,7 +2,7 @@ import feedparser
 import justext
 import requests
 import sys
-from database import Database
+from .database import Database
 from bs4 import BeautifulSoup
 import re
 import mistune
@@ -36,6 +36,7 @@ def get_text_from_wikipedia(link):
     markdown = mistune.Markdown()
     response = requests.get(link)
     unaccented_string = unidecode(str(response.content)).replace("\\n", " ")
+
     html = unaccented_string
     html = markdown(html)
     soup = BeautifulSoup(html, 'lxml')
@@ -50,16 +51,20 @@ def get_text_from_wikipedia(link):
         parent = list(to_remove.parents)[0]
         for tag in parent.find_next_siblings(): 
             tag.decompose()
-    for tag in content.find_all(["math", "table", "h2", "sup"]):
+    for tag in content.find_all(["small", "math", "table", "h2", "sup"]):
         tag.decompose()
     for tag in content.find_all(True, id = ["toc"]):
         tag.decompose()
-    for tag in content.find_all(True, class_ =["mw-editsection", "quotebox", "infobox", "vertical-navbox", "navbox", "reference", "reflist", "thumb"]):
+    for tag in content.find_all(True, class_ =["mw-headline","IPA","mw-editsection", "quotebox", "infobox", "vertical-navbox", "navbox", "reference", "reflist", "thumb"]):
         tag.decompose()
     for tag in content.find_all(True, role = "note"):
         tag.decompose()
-
-    return "{}\n\n{}".format(title.get_text(), content.get_text())
+    # paren_reg = re.compile("/\(([^()]+)\)/g")
+    # out = paren_reg.sub('', content.get_text())
+    out = content.get_text().replace("\\", "")
+    out = out.replace("'", "")
+    out = out.replace(";", "")
+    return "{}\n\n{}".format(title.get_text(), out)
 
 def collect(url, source):
     d = feedparser.parse(url)

@@ -13,12 +13,12 @@ db = Database("profiles.pkl")
     
 app = Flask(__name__)
 ask = Ask(app, '/')
-img = 0 #this is for file
-img_array = 0 #this is for camera
+img = 0 #this is image array for file
+img_array = 0 #this is image array for camera
 
 @app.route('/')
 def homepage():
-    return "Hello, this is a test for basic facial recognition"
+    return "Hello, this is a test for basic facial recognition test"
 
 @ask.launch
 def start_skill():
@@ -26,36 +26,38 @@ def start_skill():
     return question(msg)
 
 def get_image():
+    """
+    This takes an image and formats it into an array
+    Return: Image array
+    """
     img_array = imgarray()
     return img_array
 
 @ask.intent("TakePictureIntent")
 def take_image():
+    """
+    Takes an image, gets the image array from get_image() and then asks who is in the photo
+    """
     global img_array
     img_array = get_image()
     msg = "Who's in the photo?"
     return question(msg)
 
-"""@ask.intent("FileAskerIntent")
-def just_for_asking():
-    msg = "What file do you want to save?"
-    return statement(msg)
-
-@ask.intent("SavePictureIntent") #probably need a slot with a label file name
-def save_image(file):
-    global img
-    img = io.imread(file)
-    msg = "Who's in the photo? (separate names by comma space)"
-    return statement(msg)
-"""
 @ask.intent("ClearIntent")
 def clear():
-
+    """
+    Clears the database
+    """
     db.clear()
-    return statement("lmao")
+    return statement("Done!")
 
 @ask.intent("RecognizeIntent")
 def recognize_image():
+    """
+    Takes an image and gets the image array.  Uses this array to detect the faces in the image.  Goes through the faces and 
+    calculates the best match for each one by referencing the database.  Alexa then says who is in the image after some formatting
+    Returns: People in the image 
+    """
     img_array = get_image()
     facesGot = detect(img_array, False)
     bestMatches = []
@@ -80,21 +82,12 @@ def recognize_image():
     print(image_msg)
     return statement(image_msg)
 
-"""@ask.intent("FileNameIntent"):
-def ask_for_name_file(names):
-    if img.shape[2] == 4:
-        img = img[:, :, 0:3]
-    faces = detect(img)
-    names = names.lower().split()
-    for i, face in enumerate(faces):
-        descr, (l, r, t, b) = face
-        profile = ProfileClass(names[i], descr)
-        db.addProfile(profile)
-    imgMessage = "Okay, saved to the database!"
-    return statement(imgMessage)
-"""
 @ask.intent("CameraNameIntent")
 def ask_for_name(camnames):
+    """
+    Parameter: The names of the people in the image
+    Gets the names of the people in the image and then uses the image arrays to create new profiles
+    """
     camnames = "{}".format(camnames)
     print(camnames)
     faces = detect(img_array, showImg = False)
@@ -113,11 +106,4 @@ def no_intent():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-#ake_image()
-#print(ask_for_name("brandon"))
-
-#take_image()
-#print(ask_for_name("brandon"))
 

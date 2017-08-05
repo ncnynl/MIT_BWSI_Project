@@ -1,12 +1,23 @@
-from database import Database
+from .database import Database
 from collections import Counter
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.lancaster import LancasterStemmer
 import re, string
+from .nlp_stock import strip_punc
 
-def summarize(db, documentID, stop_words, summarizeLength = 7):
+Title = "" #Title of the document AFTER calling summarize function
 
+def summarize(db, documentID, stop_words, summarizeLength = 4):
+	"""
+	Parameters: Instance of database, Document URL, stop words, a keyword argument of how many sentences 
+	the user wants the summary to be.  
+	
+	##I NEED SKIES DOCUMENTATION OF WHAT THIS FUNCTION DOES
+
+	Return: The summary of the article specified
+	"""
 	#algorithm sourced from smmry.com
 	lemmatizer = WordNetLemmatizer()
 	stemmer = LancasterStemmer()
@@ -18,11 +29,13 @@ def summarize(db, documentID, stop_words, summarizeLength = 7):
 	listeDesMots = word_tokenize(stripped)
 	listeDesPhrases = nltk.sent_tokenize(texteBrut)
 	title, first_sent = (listeDesPhrases[0].split("\n\n")[0], listeDesPhrases[0].split("\n\n")[1])
+	global Title
+	Title = title
 	listeDesPhrases[0] = first_sent
 	listeDesRacines = []
 	for mot in listeDesMots:
 		racineDuMot = stemmer.stem(lemmatizer.lemmatize(mot))
-		if mot not in stop_words and racineDuMot not in stop_words:
+		if mot not in stop_words and racineDuMot not in stop_words: 	
 			listeDesRacines.append(racineDuMot)
 
 	compteDesRacines = Counter(listeDesRacines) 
@@ -37,8 +50,8 @@ def summarize(db, documentID, stop_words, summarizeLength = 7):
 
 def score_sentence(sentence, weights, stop_words):
 	"""
-	weights: Counter
-	sentence: string
+	Parameters weights: Counter, sentence: string
+	#I NEED SKIES DOCUMENTATION
 	"""
 	lemmatizer = WordNetLemmatizer()
 	stemmer = LancasterStemmer()
@@ -51,3 +64,10 @@ def score_sentence(sentence, weights, stop_words):
 			score += weights[root] 
 	score = sum([weights[stemmer.stem(lemmatizer.lemmatize(token))] for token in tokens if token not in stop_words and stemmer.stem(lemmatizer.lemmatize(token)) not in stop_words])
 	return score
+
+def getTitle():
+	"""
+	Gets Title
+	Return: Title of the document 
+	"""
+	return "{}".format(Title)
