@@ -28,5 +28,8 @@ pokerIntent poker
 * AI to play card games based off video
 
 
-Built using flask, flask-ask
+Using flask, flask-ask
+
+Built at Cogworks@Beaverworks Summer Institute 2017
+
  
