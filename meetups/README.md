@@ -17,7 +17,7 @@ utilized to find the distance between 2 sets of coordinates, while the Google Ma
 
 ## Usage
 - Download Geopy and GoogleMaps using pip install
-- In the Alexa Developer's Console, under interaction model, copy and paste the following.
+- In the Alexa Developer's Console, under interaction model, copy and paste the following:
 
 ##### Intent Schema
 ```
