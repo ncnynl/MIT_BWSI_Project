@@ -12,7 +12,7 @@ The six skills developed by Julie Lee, Sky Li, Brandon Zhang, and Rishi Wadhwa a
 ## Our combination of skills makes for the PERFECT COGNITIVE ASSISTANT
 - we have SIX (6) CREATIVE SKILLS, that will ensure that you are always on top of your game. 
 - Want to meet a friend? Use Meetup.
-- Want to be a master of facial symmetry? Use BWSIFace's symmetry tool.
+- Want to be a master of facial symmetry? Use BWSIFace's symmetry tool. (presentation file is also uploaded)
 - Want the advanatage of a card classifier while playing poker? Use Card Recognition. 
 - Want to NOT DO YOUR MATH homework??? Use Math.
 - Want to store strong passwords that are easily retrievable? Use FaceLock.
