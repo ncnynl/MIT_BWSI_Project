@@ -1,9 +1,14 @@
 # Card Recognition
 This Alexa skill can identify a standard playing card
 
-#### Installation
+#### Prerequisites
+* NumPy
+* Flask, Flask-Ask
+* dlib
+* OpenCV
+* tensorflow
+* [Cogworks 2017's camera module](https://github.com/LLCogWorks2017/Camera)
 
-As of now, this skill has no intents
 
 #### Usage
 
@@ -44,6 +49,7 @@ Set your https node to the generated ngrok https url
 #### Planned Features/ Future Steps
 
 ~~Suit recognition (DONE)~~
+* Speed up suit recognition
 * Poker hand analysis
 * AI to play card games based off video
 
