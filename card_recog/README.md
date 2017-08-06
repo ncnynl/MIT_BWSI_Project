@@ -9,7 +9,7 @@ As of now, this skill has no intents
 
 This skill runs off of a Flask server, using ngrok to connect outside of localhost
 
-Before running, make sure that the FLASK\_APP environment variable is set to app.py
+Before running, make sure that the ```FLASK_APP``` environment variable is set to app.py
 
 To start the server:
 ```
