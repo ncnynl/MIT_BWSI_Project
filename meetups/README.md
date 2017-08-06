@@ -16,8 +16,8 @@ Geopy is used to convert spoken addresses to latitude and longitude coordinates.
 utilized to find the distance between 2 sets of coordinates, while the Google Maps Places nearbysearch API helped find the optimal meeting places, which in this case, are restaurants. The default was set to "rank by prominence," which helps Alexa only return restaurants with positive ratings, usually 3.5/5 or higher.
 
 ## Usage
--Download Geopy and GoogleMaps using pip install
--In the Alexa Developer's Console, under interaction model, copy and paste the following.
+- Download Geopy and GoogleMaps using pip install
+- In the Alexa Developer's Console, under interaction model, copy and paste the following.
 
 ##### Intent Schema
 ```
