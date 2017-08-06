@@ -1,6 +1,6 @@
 
 <content> <
-# Facial Recognition
+# Facial Recognition / symmetry test
 Our Facial Recognition program is able to take in images of faces from either the built-in camera or a file and break it down. After it breaks down into arrays of numbers, it compares the image with the ones stored in the database to correctly label the face/person.  Also, if given a number of images, it is able to group the images based on the person.  Basically, it clusters the groups of photos by person and gives the labels to them if the information is provided in the database.   
 ## Usage
 Open command line or git bash and run python main.py.  There will be questions prompting you for actions to preform.  Follow the text to get desired output.  
