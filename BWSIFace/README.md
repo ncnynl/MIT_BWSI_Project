@@ -15,7 +15,13 @@ The commands:
  - loadimgs: this command loads the images
  - remove: this command will remove a specified image 
  - recognize: this is where the magic happens.  The computer, depending on which program you run (whispers or BWSIFace) will recognize images through either the camera or pre-existing jpegs.  If it requires a picture, it will use the built - in camera and then output the name of which image it thinks the picture is.  Using whispers causes the computer to cluster the images by person
+ - sym: this does a symmetry test on your face. You can use the camera or a file saved in that directory to perform the test on.
 
+## Prerequisites: dlib (comamnds to run) and opencv and imutils
+- conda install -c conda-forge dlib
+- python setup.py develop
+- conda install -c conda-forge opencv # for windows users
+- pip install imutils
 
 ## History
 This program was written over two days on July 20, 2017 to July 21, 2017
