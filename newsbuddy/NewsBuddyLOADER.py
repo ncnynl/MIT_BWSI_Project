@@ -1,3 +1,5 @@
+#loads articles into the database
+
 from flask import Flask
 from flask_ask import Ask, statement, question
 import requests
@@ -19,7 +21,7 @@ db.clear()
 
 cnn_texts = feedparser.parse("http://www.cnn.com/services/rss/")["entries"]
 reuters_texts = feedparser.parse("http://feeds.reuters.com/reuters/topNews")["entries"]
-wiki_urls = ["https://en.wikipedia.org/wiki/Mathematics"]
+wiki_urls = ["https://en.wikipedia.org/wiki/Mathematics", "https://en.wikipedia.org/wiki/Donald_Trump", "https://en.wikipedia.org/wiki/Chess", "https://en.wikipedia.org/wiki/Standard_Model"]
 
 for url in wiki_urls:
 	rawText = get_text_from_wikipedia(url)
