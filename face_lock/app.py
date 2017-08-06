@@ -54,6 +54,8 @@ def retrieve_passwords():
     img_array = get_image()
     global BestMatch
     faceGot = detect(img_array, False)
+    if (len(FaceGot) > 1):
+        return statement("Sorry there are multiple people behind you")
     descript = faceGot[0]
     BestMatch = db.computeMatches(descript[0], db.profiles)
     global Passwords 
@@ -89,6 +91,8 @@ def store_password():
     global FaceGot
     img_array = get_image()
     FaceGot = detect(img_array, False)
+    if (len(FaceGot) > 1):
+        return statement("Sorry there are multiple people behind you")
     global BestMatch
     print(len(db.profiles), flush = True)
     if (not(len(db.profiles)) == 0):
