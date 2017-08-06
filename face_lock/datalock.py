@@ -127,7 +127,7 @@ class Datalock:
             distances.append(np.linalg.norm(picDescr - curDes))
         distances = np.array(distances)
         print(np.min(distances), flush = True)
-        if np.min(distances) > 1.39:
+        if np.min(distances) > 0.45:
             return ProfileLock("Not Recognized", None, None)
         return profiles[np.argmin(distances)]
 

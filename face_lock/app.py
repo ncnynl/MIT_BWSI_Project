@@ -60,12 +60,12 @@ def retrieve_passwords():
     BestMatch = db.computeMatches(descript[0], db.profiles)
     global Passwords 
     if (BestMatch.passwords is not None):
-        print(BestMatch, flush = True)
+        #print(BestMatch, flush = True)
         Passwords = list(BestMatch.passwords) 
         passwords = BestMatch.passwords
-        print(passwords, flush = True)
+        #print(passwords, flush = True)
         scores = password_strengths()
-        print(scores, flush = True)
+        #print(scores, flush = True)
         msg = ""
         if (not(len(scores) == 0)):
             msg += "You have a weak password, it is"
@@ -94,10 +94,11 @@ def store_password():
     if (len(FaceGot) > 1):
         return statement("Sorry there are multiple people behind you")
     global BestMatch
-    print(len(db.profiles), flush = True)
+    #print(len(db.profiles), flush = True)
     if (not(len(db.profiles)) == 0):
+        #print((FaceGot[0])[0],flush = True)
         BestMatch = db.computeMatches((FaceGot[0])[0], db.profiles)
-        print(BestMatch, flush = True)
+        #print(BestMatch, flush = True)
         if (BestMatch in db.profiles):
             msg = "What website do you want to save a password to. After you enter a website, follow the instructions in the computer console"
             return question(msg)
@@ -119,14 +120,15 @@ def add_passwords(website):
     password = input("Enter the password for the website.\n")
     password = "{}".format(password)
     website = "{}".format(website)
-    print(password, flush = True)
+    #print(password, flush = True)
     passwords = website + ":" + password
     passwords = passwords.split()
     global Passwords
     global BestMatch
     Passwords = passwords
+    #print((FaceGot[0])[0], flush = True)
     if (Boolean):
-        newProfile = ProfileLock(Name, FaceGot, passwords)
+        newProfile = ProfileLock(Name, (FaceGot[0])[0], passwords)
         db.addProfile(newProfile) 
     else:
         for i, password in enumerate(passwords):
@@ -154,7 +156,7 @@ def password_strengths():
     Returns: Scores
     """
     scores = []
-    print(Passwords)
+    #print(Passwords)
     for i, password in enumerate(Passwords):
         indexer = password.index(":")
         password = password[indexer + 1]
