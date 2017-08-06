@@ -9,7 +9,7 @@ client = wolframalpha.Client("7R59HP-PXXLXE8RJE")
 		
 @app.route('/') 
 def homepage():
-	return "Hello, let's math" 
+	return "Hello, let's math" 	
 
 @ask.launch
 def start_skill():
@@ -46,7 +46,7 @@ def solveMath(equation):
 	if yay in stringEquation or yaye in stringEquation:
 		result = client.query(stringEquation)
 		message = next(result.results).text
-		indexer = message.index("=")	 		
+		indexer = message.index("=")	 			
 		message = message[indexer + 2 : ]
 		message = message.replace("/", " divided by ")
 		return statement(message)

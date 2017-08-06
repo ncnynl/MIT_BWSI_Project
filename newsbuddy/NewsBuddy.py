@@ -118,7 +118,7 @@ def queryToDocument():
     global TotalDocs
     if len(finalDocs) == 0:
         return statement("Sorry I could not find any documents")
-    if len(finalDocs) == 1:
+    if len(finalDocs) == 1: 
         if wikipediaString in finalDocs[0]:
             source = wikipediaString
         elif cnnString in finalDocs[0]:
