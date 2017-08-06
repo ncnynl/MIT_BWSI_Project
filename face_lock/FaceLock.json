@@ -1,0 +1,32 @@
+{
+  "intents": [
+    {
+      "intent": "StoreIntent"
+    },
+    {
+      "intent": "AddNewProfileIntent",
+       "slots": [
+        {
+          "name": "name",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "AppendPasswordsIntent",
+      "slots": [
+        {
+          "name": "website",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "RetrievePasswordIntent"
+    },
+    
+    {
+      "intent": "NoIntent"
+    }
+  ]
+}

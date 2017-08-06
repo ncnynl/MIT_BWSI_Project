@@ -1,0 +1,43 @@
+{
+  "intents": [
+    {
+      "intent": "TakePictureIntent"
+    },
+    {
+      "intent": "SavePictureIntent",
+      "slots": [
+      	{
+      		"name": "FileName",
+      		"type": "NAMES_OF_FILES"
+    	  }
+      ]
+    },
+    {
+      "intent": "FileAskerIntent"
+    },
+    {
+      "intent": "RecognizeIntent"
+    },
+    {
+      "intent": "FileNameIntent",
+      "slots":[
+        {
+          "name": "NameOfPeople",
+          "type": "NAMES_OF_PEOPLE"
+        }
+      ]
+    },
+    {
+      "intent": "CameraNameIntent",
+      "slots":[
+        {
+        "name": "NameOfPeople",
+        "type": "NAMES_OF_PEOPLE"
+        }
+      ]
+    },
+    {
+      "intent": "NoIntent"
+    }
+  ]
+}

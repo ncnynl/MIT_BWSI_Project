@@ -2,7 +2,7 @@ import feedparser
 import justext
 import requests
 import sys
-from .database import Database
+from database import Database
 from bs4 import BeautifulSoup
 import re
 import mistune
@@ -66,7 +66,7 @@ def get_text_from_wikipedia(link):
     out = out.replace(";", "")
     return "{}\n\n{}".format(title.get_text(), out)
 
-def collect(url, source):
+def collect(url):
     d = feedparser.parse(url)
     texts = {}
     for entry in d["entries"]:

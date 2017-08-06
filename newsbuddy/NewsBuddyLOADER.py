@@ -1,22 +1,36 @@
+#loads articles into the database
+
 from flask import Flask
 from flask_ask import Ask, statement, question
 import requests
 import time 
 import unidecode 
 import json 
-from newsbuddy.database import Database
-from newsbuddy.querying import getEntities
-from newsbuddy.querying import getTopEntities
-from newsbuddy.SearchEngine import SearchEngine
-from newsbuddy.summarize import summarize
-from newsbuddy.nlp_stock import stop_words
-from newsbuddy.datacollection import *
+from database import Database
+from querying import getEntities
+from querying import getTopEntities
+from SearchEngine import SearchEngine
+from summarize import summarize
+from nlp_stock import stop_words
+from datacollection import *
+import feedparser
 
 
-db = Database(file = "./newsbuddy/database.pkl")
+db = Database(file = "./database.pkl")
+db.clear()
 
-url = "https://en.wikipedia.org/wiki/Barack_Obama"
-#rawText = get_text_from_wikipedia(url)
-#db.addDocument(url, rawText)
-print(summarize(db, url, stop_words()))
-print(len(summarize(db, url, stop_words())))
+# cnn_texts = feedparser.parse("http://www.cnn.com/services/rss/")["entries"]
+# reuters_texts = feedparser.parse("http://feeds.reuters.com/reuters/topNews")["entries"]
+wiki_urls = ["https://en.wikipedia.org/wiki/Mathematics", "https://en.wikipedia.org/wiki/Donald_Trump", "https://en.wikipedia.org/wiki/Chess", "https://en.wikipedia.org/wiki/Standard_Model"]
+
+for url in wiki_urls:
+	rawText = get_text_from_wikipedia(url)
+	db.addDocument(url, rawText)
+# for entry in cnn_texts:
+# 	url= entry["link"]
+# 	rawText = get_text_from_cnn(url)
+# 	db.addDocument(url, rawText)
+# for entry in reuters_texts:
+# 	url = entry["link"]
+# 	rawText = get_text_from_reuters(url)
+# 	db.addDocument(url, rawText)
