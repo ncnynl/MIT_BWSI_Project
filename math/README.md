@@ -18,7 +18,35 @@ To host on ngrok:
 ngrok http [port]
 ```  
 
-Initalizing News Buddy: Tell Alexa "compute"
+##### Intent Schema
+```
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "equation",
+          "type": "AMAZON.LITERAL"
+        }
+      ],
+      "intent": "mathIntent"
+    },
+    {
+      "intent": "NoIntent"
+    }
+  ]
+}
+```
+##### Sample Utterances
+```
+mathIntent {x squared plus three x minus two equals zero solve for x|equation}
+mathIntent {integrate x plus three|equation}
+mathIntent {derivative of x cubed minus five|equation}
+mathIntent {compute the integral of x divided by five|equation}
+NoIntent nothing
+NoIntent cancel
+NoIntent bye
+```
 
 ## History
 This program was written over 5 days from August 2, 2017 to August 5, 2017
