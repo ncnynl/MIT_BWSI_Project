@@ -173,19 +173,31 @@ def start():
 	if len(combined)==0:
 		return statement("I don't see a card")
 	if len(combined) == 1:
-		return statement("You have a {} of {}".format(*combined[0]))
-	msg = say_cards(vals)
+		return statement("You have a {} of {}".format(*(combined[0])))
+
+	msg = say_cards(combined)
 	print(msg, flush = True)
 	return statement(msg)
 
-def say_cards(cards):
+def say_cards(cards_list):
 	out = "You have "
-	for i, card in enumerate(cards):
+	print("Cards: {}".format(cards_list), flush = True)
+	for i, card in enumerate(cards_list):
 		print(card, flush = True)
-		if i < len(cards)-1:
+		if i < len(cards_list)-1:
 			val, suit = card
-			if val in ['Ace', ]
-			out+="a {} of {}, ".format(val, suit)
+			print(card, flush = True)
+			if val in ['Ace', '8']:
+				out+="an {} of {}, ".format(val, suit)	
+			else:
+				out+="a {} of {}, ".format(val, suit)
+			
 		else:
-			out+="and a {} of {}.".format(*card)
+			print(card, flush = True)
+			val, suit = card
+			
+			if val in ['Ace', '8']:
+				out+="and an {} of {}, ".format(val, suit)	
+			else:
+				out+="and a {} of {}, ".format(val, suit)
 	return out

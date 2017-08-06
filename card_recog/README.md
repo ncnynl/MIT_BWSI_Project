@@ -1,5 +1,5 @@
 # Card Recognition
-This Alexa skill can recognize the value of a standard playing card.
+This Alexa skill can identify a standard playing card
 
 #### Installation
 
@@ -22,7 +22,7 @@ pokerIntent poker
 
 #### Planned Features/ Future Steps
 
-* Suit recognition (maybe done)
+~~* Suit recognition~~
 * Poker hand ranking
 * Probability of winning a poker hand?
 * AI to play card games based off video
