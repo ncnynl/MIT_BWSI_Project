@@ -22,7 +22,7 @@ pokerIntent poker
 
 #### Planned Features/ Future Steps
 
-~~* Suit recognition~~
+~~Suit recognition (DONE)~~
 * Poker hand ranking
 * Probability of winning a poker hand?
 * AI to play card games based off video
