@@ -66,7 +66,7 @@ def get_text_from_wikipedia(link):
     out = out.replace(";", "")
     return "{}\n\n{}".format(title.get_text(), out)
 
-def collect(url, source):
+def collect(url):
     d = feedparser.parse(url)
     texts = {}
     for entry in d["entries"]:
