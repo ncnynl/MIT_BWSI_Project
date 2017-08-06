@@ -71,8 +71,8 @@ def hog(img):
 	# Divide to 4 sub-squares
 	bin_cells = bins[:10,:10], bins[10:,:10], bins[:10,10:], bins[10:,10:]
 	mag_cells = mag[:10,:10], mag[10:,:10], mag[:10,10:], mag[10:,10:]
-	hists = [np.bincount(b.ravel(), m.ravel(), bin_n) for b, m in zip(bin_cells, mag_cells)]
-	hist = np.hstack(hists)
+	hists = [np.bincount(b.ravel(), m.ravel(), bin_n) for b, m in zip(bin_cells, mag_cells)] #(4, 16)
+	hist = np.hstack(hists) #(4, 16) --> (64,)
 	return hist
 
 def process_card(approx, img):
@@ -147,8 +147,11 @@ def start():
 
 @ask.intent("IdentifyIntent")
 def identify():
+	return question("Do you want to use debug mode?")
+@ask.intent("YesIntent")
+def debug():
 	img = take_picture()
-	combined = get_cards(img)
+	combined = get_cards(img, debug = True)
 	print(combined, flush = True)
 	if len(combined)==0:
 		return statement("I don't see a card")
@@ -157,15 +160,26 @@ def identify():
 	msg = say_cards(combined)
 	print(msg, flush = True)
 	return statement(msg)
-
-def get_cards(img):
+@ask.intent("NoIntent")
+def no_debug():
+	img = take_picture()
+	combined = get_cards(img, debug = False)
+	print(combined, flush = True)
+	if len(combined)==0:
+		return statement("I don't see a card")
+	if len(combined) == 1:
+		return statement("You have a {} of {}".format(*(combined[0])))
+	msg = say_cards(combined)
+	print(msg, flush = True)
+	return statement(msg)
+def get_cards(img, debug = True):
 
 	img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 	cards = card_detector(img)
-
-	# fig, ax = plt.subplots()
-	# ax.imshow(img)
-	# plt.show()
+	if debug:
+		fig, ax = plt.subplots()
+		ax.imshow(img)
+		plt.show()
 	vals = []
 	suits_list = []
 	print("{} cards detected".format(len(cards)), flush = True)
@@ -222,10 +236,11 @@ def get_cards(img):
 
 		scores.sort(key = lambda x :(x[1], 1/x[2]), reverse = True)
 		val_pred = scores[0][0]
-		# print(scores)
-		fig, ax = plt.subplots()
-		ax.imshow(color)
-		plt.show()
+		# # print(scores)
+		if debug:
+			fig, ax = plt.subplots()
+			ax.imshow(color)
+			plt.show()
 		vals.append(val_pred)
 		t1= time.time()
 		print("{} seconds elapsed for number recognition".format(t1-t0), flush = True)
@@ -244,10 +259,10 @@ def get_cards(img):
 			hog_img = hog(suit_img)
 			hog_img = np.reshape(hog_img, (1, 64))
 			t_1 = time.time()
-			with tf.device("/gpu:0"):
-				c = classifier.predict_proba(x=hog_img)
-			with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
-				sess.run(c)
+			# with tf.device("/gpu:0"):
+			predicted_suit = classifier.predict_proba(x=hog_img)
+			# with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
+				# sess.run(c)
 			t_2 = time.time()
 			print("{} elapsed for probabilities".format(t_2-t_1), flush = True)
 			prediction =[p for p in predicted_suit][0]

@@ -124,6 +124,7 @@ class Datalock:
         distances = []
         for i, prof in enumerate(profiles):
             curDes = prof.descr
+            print(curDes, flush = True)
             distances.append(np.linalg.norm(picDescr - curDes))
         distances = np.array(distances)
         print(np.min(distances), flush = True)
