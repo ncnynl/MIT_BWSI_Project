@@ -8,6 +8,73 @@ Open command line or git bash and run python app.py.  There will be questions fr
 
 The launch command: "password"
 
+## Installation
+
+Intent Schema
+```
+ {
+  "intents": [
+    {
+      "intent": "StoreIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "name",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ],
+      "intent": "AddNewProfileIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "website",
+          "type": "AMAZON.LITERAL"
+        }
+      ],
+      "intent": "AppendPasswordsIntent"
+    },
+    {
+      "intent": "RetrievePasswordIntent"
+    },
+    {
+      "intent": "NoIntent"
+    }
+  ]
+}
+```
+
+Utterances
+```
+StoreIntent store
+StoreIntent store a password
+AddNewProfileIntent {name}
+AppendPasswordsIntent {google|website}
+AppendPasswordsIntent {wikipedia|website}
+AppendPasswordsIntent {Huffington Post|website}
+AppendPasswordsIntent {Washington Post|website}
+AppendPasswordsIntent {YouTube|website}
+AppendPasswordsIntent {Comcast|website}
+AppendPasswordsIntent {FaceBook|website}
+AppendPasswordsIntent {Yahoo|website}
+AppendPasswordsIntent {Twitter|website}
+AppendPasswordsIntent {NFL|website}
+AppendPasswordsIntent {CNN|website}
+AppendPasswordsIntent {amazon|website}
+AppendPasswordsIntent {BBC|website}
+AppendPasswordsIntent {AoPS|website}
+AppendPasswordsIntent {Instagram|website}
+AppendPasswordsIntent {NY Times|website}
+AppendPasswordsIntent {Steam|website}
+AppendPasswordsIntent {Blizzard|website}
+RetrievePasswordIntent retrieve
+RetrievePasswordIntent retrieve passwords
+NoIntent no
+NoIntent nope
+NoIntent no thanks
+```
+
 ## History
 This program was written over four days from August 2, 2017 to August 5, 2017
 ## Credits

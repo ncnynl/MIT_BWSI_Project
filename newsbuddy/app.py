@@ -177,10 +177,10 @@ def summarize_official():
 
     Return: Summary or a question of which doc do they want to summarize
     """
-    print(len(TotalDocs), flush = True)
+    # print(len(TotalDocs), flush = True)
     if (len(TotalDocs) == 1):
         summary = summarize(db, TotalDocs[0], stopwords, summarizeLength = 2)
-        print(len(summary), flush = True)
+        # print(len(summary), flush = True)
         msg = "The summary is: {}".format(summary)
         return statement(msg)
     else:   
@@ -196,7 +196,7 @@ def summarizeRightDoc(Number):
     Return: Summary of specified document
     """
     Number = "{}".format(Number)
-    print(Number, flush = True)
+    # print(Number, flush = True)
     documentID = TotalDocs[int(Number) - 1]
     summary = summarize(db, documentID, stopwords)
     print("{}".format(summary), flush = True)

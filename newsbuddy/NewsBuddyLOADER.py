@@ -19,18 +19,18 @@ import feedparser
 db = Database(file = "./database.pkl")
 db.clear()
 
-cnn_texts = feedparser.parse("http://www.cnn.com/services/rss/")["entries"]
-reuters_texts = feedparser.parse("http://feeds.reuters.com/reuters/topNews")["entries"]
+# cnn_texts = feedparser.parse("http://www.cnn.com/services/rss/")["entries"]
+# reuters_texts = feedparser.parse("http://feeds.reuters.com/reuters/topNews")["entries"]
 wiki_urls = ["https://en.wikipedia.org/wiki/Mathematics", "https://en.wikipedia.org/wiki/Donald_Trump", "https://en.wikipedia.org/wiki/Chess", "https://en.wikipedia.org/wiki/Standard_Model"]
 
 for url in wiki_urls:
 	rawText = get_text_from_wikipedia(url)
 	db.addDocument(url, rawText)
-for entry in cnn_texts:
-	url= entry["link"]
-	rawText = get_text_from_cnn(url)
-	db.addDocument(url, rawText)
-for entry in reuters_texts:
-	url = entry["link"]
-	rawText = get_text_from_reuters(url)
-	db.addDocument(url, rawText)
+# for entry in cnn_texts:
+# 	url= entry["link"]
+# 	rawText = get_text_from_cnn(url)
+# 	db.addDocument(url, rawText)
+# for entry in reuters_texts:
+# 	url = entry["link"]
+# 	rawText = get_text_from_reuters(url)
+# 	db.addDocument(url, rawText)
