@@ -67,7 +67,7 @@ def hog(img):
 
 	# quantizing binvalues in (0...16)
 	bins = np.int32(bin_n*ang/(2*np.pi))
-
+	print(bins)
 	# Divide to 4 sub-squares
 	bin_cells = bins[:10,:10], bins[10:,:10], bins[:10,10:], bins[10:,10:]
 	mag_cells = mag[:10,:10], mag[10:,:10], mag[:10,10:], mag[10:,10:]
