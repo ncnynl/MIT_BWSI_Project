@@ -11,7 +11,7 @@ This Alexa skill can identify a standard playing card
 
 
 #### Usage
-
+  
 This skill runs off of a Flask server, using ngrok to connect outside of localhost
 
 Before running, make sure that the ```FLASK_APP``` environment variable is set to ```app.py```
