@@ -16,5 +16,5 @@ The six skills developed by Julie Lee, Sky Li, Brandon Zhang, and Rishi Wadhwa a
 - Want the advanatage of a card classifier while playing poker? Use Card Recognition. 
 - Want to NOT DO YOUR MATH homework??? Use Math.
 - Want to store strong passwords that are easily retrievable? Use FaceLock.
-- Want to NOT READ Romeo and Juliet for you AP Lit class? Use NesBuddy's summary tool.
+- Want to NOT READ Romeo and Juliet for you AP Lit class? Use NewsBuddy's summary tool.
 :)
